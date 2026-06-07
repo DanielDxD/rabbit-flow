@@ -94,9 +94,19 @@ dotnet nuget push artifacts/RabbitFlow.1.0.0.snupkg \
 
 ## Publish via GitHub Actions
 
+The [`.github/workflows/release-nuget.yml`](../.github/workflows/release-nuget.yml) workflow runs automatically:
+
+| Trigger | What runs |
+|---|---|
+| Push / merge to `main` or `master` | Test → Pack → **Publish to NuGet** |
+| Pull request to `main` or `master` | Test → Pack (no publish) |
+| GitHub Release published | Test → Pack → Publish to NuGet |
+| Manual (`workflow_dispatch`) | Test → Pack → Publish to NuGet |
+
+Setup:
+
 1. Add the `NUGET_API_KEY` secret under **Settings → Secrets and variables → Actions**
-2. Create a GitHub release with tag `v1.0.0`
-3. The [`.github/workflows/release-nuget.yml`](../.github/workflows/release-nuget.yml) workflow publishes automatically
+2. Merge to `main` (or create a GitHub release)
 
 Manual trigger:
 

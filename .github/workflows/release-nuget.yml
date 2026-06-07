@@ -1,6 +1,12 @@
 name: Release NuGet
 
 on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
   release:
     types: [published]
   workflow_dispatch:
@@ -20,10 +26,12 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.0.x'
+          dotnet-version: "10.0.x"
 
       - name: Restore
-        run: dotnet restore
+        run: |
+          dotnet restore RabbitFlow/RabbitFlow.csproj
+          dotnet restore tests/RabbitFlow.Tests/RabbitFlow.Tests.csproj
 
       - name: Test
         run: dotnet test tests/RabbitFlow.Tests/RabbitFlow.Tests.csproj -c Release --no-restore
@@ -37,7 +45,10 @@ jobs:
             /p:SymbolPackageFormat=snupkg
 
       - name: Push to NuGet.org
-        if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+        if: |
+          github.event_name == 'push' ||
+          github.event_name == 'release' ||
+          github.event_name == 'workflow_dispatch'
         run: |
           dotnet nuget push ./artifacts/*.nupkg \
             --api-key ${{ secrets.NUGET_API_KEY }} \
