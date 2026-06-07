@@ -1,0 +1,17 @@
+<Project>
+    <PropertyGroup>
+        <VersionPrefix>1.0.0</VersionPrefix>
+        <Authors>Daniel Lopes</Authors>
+        <Company>Daniel Lopes</Company>
+        <Copyright>Copyright © 2026 Daniel Lopes</Copyright>
+        <RepositoryUrl>https://github.com/DanielDxD/rabbit-flow</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageProjectUrl>https://github.com/DanielDxD/rabbit-flow</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageReleaseNotes>https://github.com/DanielDxD/rabbit-flow/blob/main/CHANGELOG.md</PackageReleaseNotes>
+        <LangVersion>latest</LangVersion>
+        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+        <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+    </PropertyGroup>
+</Project>

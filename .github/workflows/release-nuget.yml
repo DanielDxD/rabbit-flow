@@ -1,0 +1,49 @@
+name: Release NuGet
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Test
+        run: dotnet test tests/RabbitFlow.Tests/RabbitFlow.Tests.csproj -c Release --no-restore
+
+      - name: Pack
+        run: |
+          dotnet pack RabbitFlow/RabbitFlow.csproj \
+            -c Release \
+            -o ./artifacts \
+            /p:IncludeSymbols=true \
+            /p:SymbolPackageFormat=snupkg
+
+      - name: Push to NuGet.org
+        if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
+        run: |
+          dotnet nuget push ./artifacts/*.nupkg \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
+          dotnet nuget push ./artifacts/*.snupkg \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
